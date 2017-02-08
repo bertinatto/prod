@@ -1,0 +1,9 @@
+[package]
+name = "prod"
+version = "0.1.0"
+authors = ["Fabio Bertinatto <fabiojrb@gmail.com>"]
+
+[dependencies]
+notify-rust = "3.0"
+#nix = "0.7.0"
+ears = "0.4.0"
