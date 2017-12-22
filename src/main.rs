@@ -1,14 +1,10 @@
 use std::{thread, time};
-use std::path::Path;
 use std::io::{self, Write};
 
 extern crate notify_rust;
-extern crate ears;
 
-use ears::{Sound, AudioController};
 use notify_rust::Notification;
 
-const BEEP_FILE: &'static str = "/usr/share/sounds/freedesktop/stereo/complete.oga";
 const HELP: &'static str = r#"
 NAME
     prod - a simple Pomodor timer
@@ -48,17 +44,14 @@ impl Cmd {
         match *self {
             Cmd::Work => {
                 wait(self.get_time());
-                sound_beep();
                 notify("Good job!");
             },
             Cmd::Break => {
                 wait(self.get_time());
-                sound_beep();
                 notify("Break is over.");
             },
             Cmd::Test => {
                 wait(self.get_time());
-                sound_beep();
                 notify("Test");
             },
             Cmd::Help => repl_print(HELP),
@@ -103,22 +96,6 @@ fn notify(msg: &str) {
         .summary("prod")
         .body(msg)
         .show().unwrap();
-}
-
-// TODO: this crate is strangely increasing CPU usage. I should use another one...
-fn play_file(file: &str) {
-    let mut snd = Sound::new(file).unwrap();
-    snd.play();
-    while snd.is_playing() {}
-}
-
-fn sound_beep() {
-    if Path::new(BEEP_FILE).is_file() {
-        thread::spawn(move || {
-            play_file(BEEP_FILE);
-        });
-    }
-    
 }
 
 fn main() {
